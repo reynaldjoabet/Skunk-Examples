@@ -42,7 +42,7 @@ postgres-data
 
 #general
 *.class
-/.scala-build
+.scala-build/
 /kafka/logs
 
 /scala2-examples/target/

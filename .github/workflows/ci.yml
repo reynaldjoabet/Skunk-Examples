@@ -7,13 +7,13 @@ name: Scala CI
 
 on:
   pull_request:
-   types: [opened, closed,reopened] 
+    types: [opened, closed,reopened,edited] 
     branches: [ "main" ] #["*"]
   push:
-    branches: [ main ] 
+    branches: ["main"] 
     
 jobs:
-  build:
+  build_bloop:
     name: Build Project
     strategy:
       matrix:
@@ -30,8 +30,46 @@ jobs:
     - uses: VirtusLab/scala-cli-setup@main
       with:
         jvm: temurin:17
-        apps: sbtn bloop sbt 
-    - run: scala-cli test .    
+        apps: bloop sbt 
+    - run: bloop compile scala2-examples scala3-examples
+  build_sbt:
+    name: Build Project
+    strategy:
+      matrix:
+        os: ["ubuntu-latest", "macos-latest"]
+        scala: [2.13.12,3.3.0]
+        java: [temurin@17]
+    runs-on: ${{matrix.os}}
+
+ steps:
+    - uses: actions/checkout@v4
+      with:
+       fetch-depth: 0
+    - uses: coursier/cache-action@v6
+    - uses: VirtusLab/scala-cli-setup@main
+      with:
+        jvm: temurin:17
+        apps: sbtn sbt 
+    - run: sbt compile
+  build_scala_cli:
+    name: Build Project
+    strategy:
+      matrix:
+        os: ["ubuntu-latest", "macos-latest"]
+        scala: [2.13.12,3.3.0]
+        java: [temurin@17]
+    runs-on: ${{matrix.os}}
+
+ steps:
+    - uses: actions/checkout@v4
+      with:
+       fetch-depth: 0
+    - uses: coursier/cache-action@v6
+    - uses: VirtusLab/scala-cli-setup@main
+      with:
+        jvm: temurin:17
+        apps: sbtn  
+    - run: scala-cli compile              
   scala-steward:
    needs: build
     runs-on: ubuntu-latest
