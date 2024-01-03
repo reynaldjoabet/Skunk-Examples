@@ -1,14 +1,10 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
 
 name: Scala CI
 
 on:
   pull_request:
     types: [opened, closed,reopened,edited] 
-    branches: [ "main" ] #["*"]
+    branches: [ "main" ]
   push:
     branches: ["main"] 
     
@@ -22,7 +18,7 @@ jobs:
         java: [temurin@17]
     runs-on: ${{matrix.os}}
 
- steps:
+    steps:
     - uses: actions/checkout@v4
       with:
        fetch-depth: 0
@@ -41,7 +37,7 @@ jobs:
         java: [temurin@17]
     runs-on: ${{matrix.os}}
 
- steps:
+    steps:
     - uses: actions/checkout@v4
       with:
        fetch-depth: 0
@@ -60,7 +56,7 @@ jobs:
         java: [temurin@17]
     runs-on: ${{matrix.os}}
 
- steps:
+    steps:
     - uses: actions/checkout@v4
       with:
        fetch-depth: 0
@@ -71,7 +67,7 @@ jobs:
         apps: sbtn  
     - run: scala-cli compile              
   scala-steward:
-   needs: build
+   needs: build_sbt
     runs-on: ubuntu-latest
     name: Launch Scala Steward
     steps:
