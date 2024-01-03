@@ -9,25 +9,6 @@ on:
     branches: ["main"] 
     
 jobs:
-  build_bloop:
-    name: Build Project
-    strategy:
-      matrix:
-        os: ["ubuntu-latest", "macos-latest"]
-        scala: [2.13.12,3.3.0]
-        java: [temurin@17]
-    runs-on: ${{matrix.os}}
-
-    steps:
-    - uses: actions/checkout@v4
-      with:
-       fetch-depth: 0
-    - uses: coursier/cache-action@v6
-    - uses: VirtusLab/scala-cli-setup@main
-      with:
-        jvm: temurin:17
-        apps: bloop sbt 
-    - run: bloop compile scala2-examples scala3-examples
   build_sbt:
     name: Build Project
     strategy:
@@ -45,9 +26,9 @@ jobs:
     - uses: VirtusLab/scala-cli-setup@main
       with:
         jvm: temurin:17
-        apps: sbtn sbt 
+        apps: sbt 
     - run: sbt compile
-  build_scala_cli:
+  build_sbtn:
     name: Build Project
     strategy:
       matrix:
@@ -65,6 +46,6 @@ jobs:
       with:
         jvm: temurin:17
         apps: sbtn  
-    - run: scala-cli compile                
+    - run: sbtn compile               
 
     
