@@ -65,13 +65,6 @@ jobs:
       with:
         jvm: temurin:17
         apps: sbtn  
-    - run: scala-cli compile              
-  scala-steward:
-   needs: build_sbt
-   runs-on: ubuntu-latest
-   name: Launch Scala Steward
-   steps:
-    - name: Launch Scala Steward
-    - uses: scala-steward-org/scala-steward-action@v2  
+    - run: scala-cli compile                
 
     
