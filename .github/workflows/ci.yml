@@ -72,7 +72,6 @@ jobs:
    name: Launch Scala Steward
    steps:
     - name: Launch Scala Steward
-        #uses: scala-steward-org/scala-steward-action@v2
-        #with:  
+    - uses: scala-steward-org/scala-steward-action@v2  
 
     
