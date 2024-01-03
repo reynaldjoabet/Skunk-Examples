@@ -68,10 +68,10 @@ jobs:
     - run: scala-cli compile              
   scala-steward:
    needs: build_sbt
-    runs-on: ubuntu-latest
-    name: Launch Scala Steward
-    steps:
-      - name: Launch Scala Steward
+   runs-on: ubuntu-latest
+   name: Launch Scala Steward
+   steps:
+    - name: Launch Scala Steward
         #uses: scala-steward-org/scala-steward-action@v2
         #with:  
 
