@@ -1,0 +1,44 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# we use needs keyword to create dependency between jobs
+name: Scala CI
+
+on:
+  pull_request:
+   types: [opened, closed,reopened] 
+    branches: [ "main" ] #["*"]
+  push:
+    branches: [ main ] 
+    
+jobs:
+  build:
+    name: Build Project
+    strategy:
+      matrix:
+        os: ["ubuntu-latest", "macos-latest"]
+        scala: [2.13.12,3.3.0]
+        java: [temurin@17]
+    runs-on: ${{matrix.os}}
+
+ steps:
+    - uses: actions/checkout@v4
+      with:
+       fetch-depth: 0
+    - uses: coursier/cache-action@v6
+    - uses: VirtusLab/scala-cli-setup@main
+      with:
+        jvm: temurin:17
+        apps: sbtn bloop sbt 
+    - run: scala-cli test .    
+  scala-steward:
+   needs: build
+    runs-on: ubuntu-latest
+    name: Launch Scala Steward
+    steps:
+      - name: Launch Scala Steward
+        #uses: scala-steward-org/scala-steward-action@v2
+        #with:  
+
+    

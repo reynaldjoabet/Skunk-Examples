@@ -44,3 +44,7 @@ postgres-data
 *.class
 /.scala-build
 /kafka/logs
+
+/scala2-examples/target/
+
+/scala3-examples/target/

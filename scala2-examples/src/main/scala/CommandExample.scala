@@ -52,31 +52,31 @@ object CommandExample extends IOApp {
   // a source of sessions
   val session: Resource[IO, Session[IO]] =
     Session.single(
-      host     = "localhost",
-      user     = "jimmy",
+      host = "localhost",
+      user = "jimmy",
       database = "world",
-      password = Some("banana"),
+      password = Some("banana")
     )
 
   // a resource that creates and drops a temporary table
   def withPetsTable(s: Session[IO]): Resource[IO, Unit] = {
     val alloc = s.execute(sql"CREATE TEMP TABLE pets (name varchar, age int2)".command).void
-    val free  = s.execute(sql"DROP TABLE pets".command).void
+    val free = s.execute(sql"DROP TABLE pets".command).void
     Resource.make(alloc)(_ => free)
   }
 
   // some sample data
-  val bob     = Pet("Bob", 12)
+  val bob = Pet("Bob", 12)
   val beagles = List(Pet("John", 2), Pet("George", 3), Pet("Paul", 6), Pet("Ringo", 3))
 
   // our entry point
   def run(args: List[String]): IO[ExitCode] =
     session.flatTap(withPetsTable).map(PetService.fromSession(_)).use { s =>
       for {
-        _  <- s.insert(bob)
-        _  <- s.insert(beagles)
+        _ <- s.insert(bob)
+        _ <- s.insert(beagles)
         ps <- s.selectAll
-        _  <- ps.traverse(p => IO.println(p))
+        _ <- ps.traverse(p => IO.println(p))
       } yield ExitCode.Success
     }
 

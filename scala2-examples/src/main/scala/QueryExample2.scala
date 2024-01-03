@@ -28,30 +28,29 @@ object Service {
       SELECT name, code, population
       FROM   country
       WHERE  name like $text
-    """.query(varchar *: bpchar(3) *: int4)
-       .to[Country]
+    """
+      .query(varchar *: bpchar(3) *: int4)
+      .to[Country]
 
   def fromSession[F[_]: Applicative](s: Session[F]): F[Service[F]] =
     s.prepare(countries).map { pq =>
-
       // Our service implementation. Note that we are preparing the query on construction, so
       // our service can run it many times without paying the planning cost again.
       new Service[F] {
         def currentTimestamp: F[OffsetDateTime] = s.unique(timestamp)
-        def countriesByName(pat: String): Stream[F,Country] = pq.stream(pat, 32)
+        def countriesByName(pat: String): Stream[F, Country] = pq.stream(pat, 32)
       }
 
     }
 }
-
 
 object QueryExample2 extends IOApp {
 
   // a source of sessions
   val session: Resource[IO, Session[IO]] =
     Session.single(
-      host     = "localhost",
-      user     = "jimmy",
+      host = "localhost",
+      user = "jimmy",
       database = "world",
       password = Some("banana")
     )
@@ -65,8 +64,8 @@ object QueryExample2 extends IOApp {
     service.use { s =>
       for {
         ts <- s.currentTimestamp
-        _  <- IO.println(s"timestamp is $ts")
-        _  <- s.countriesByName("U%")
+        _ <- IO.println(s"timestamp is $ts")
+        _ <- s.countriesByName("U%")
                .evalMap(c => IO.println(c))
                .compile
                .drain

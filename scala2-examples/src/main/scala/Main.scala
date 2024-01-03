@@ -49,24 +49,25 @@ import natchez.Trace.Implicits.noop
 
 import skunk.~
 import cats.effect.IO
+import cats.effect.Resource
 //Session represents a connection to a Postgres database.
 //Skunk currently supports the trust (no password necessary), password, md5 and scram-sha-256 authentication methods.
 object Main extends App {
 
-  val kunkConnectionPool=Session.pooled[IO](
-         host     = "localhost",
-         port     = 5432,
-         user     = "jimmy",
-         database = "world",
-         password = Some("banana"),
-         max = 10,
-         debug = false
+  val kunkConnectionPool: Resource[IO, Resource[IO, Session[IO]]] = Session.pooled[IO](
+    host = "localhost",
+    port = 5432,
+    user = "jimmy",
+    database = "world",
+    password = Some("banana"),
+    max = 10,
+    debug = false
   )
 
-  //An encoder is needed any time you want to send a value to Postgres; i.e., any time a statement has parameters.
+  // An encoder is needed any time you want to send a value to Postgres; i.e., any time a statement has parameters.
 
-  //use one or more existing encoders (see Schema Types) composed or transformed as desired.
+  // use one or more existing encoders (see Schema Types) composed or transformed as desired.
 
-  //A base encoder maps a Scala type to a single Postgres schema type
+  // A base encoder maps a Scala type to a single Postgres schema type
   println("Hello, World!")
 }

@@ -10,8 +10,10 @@ Codecs When you construct a statement each parameter is specified via an `Encode
 
 HLists This idea was borrowed from scodec. We use `~` to build left-associated nested pairs of values and types, and can destructure with `~` the same way.
 
-`val a: Int ~ String ~ Boolean = 1 ~ "foo" ~ true`
- `a match { case n ~ s ~ b => ...}`
+```scala
+val a: Int ~ String ~ Boolean = 1 ~ "foo" ~ true
+ a match { case n ~ s ~ b => ...}
+ ```
 
 
 A simple query is a query with no parameters.
@@ -45,3 +47,28 @@ The extend query protocol (i.e., `Session#prepare`) is more powerful and more ge
 - you will be using the query more than once per session.
 
 profunctor can be contramapped to change the input type, and mapped to change the output type.
+
+## Heterogenous list, or HList
+represent lists of varying lengths with different element types
+`HList` type class provides a way to create a list of more than a single type. Remember that the `List` type class in Scala always provides a list of a specific type (e.g. List[Int]). With HList, we can create lists of more than a single type.
+
+[Shapeless and Scala3](http://www.limansky.me/posts/2021-07-26-from-scala-2-shapeless-to-scala-3.html)
+
+[Tuples in Scala3](https://www.scala-lang.org/2021/02/26/tuples-bring-generic-programming-to-scala-3.html)
+
+In Scala 2, we can access the elements by using the _1, _2 and so on. In Scala 3, we can access the tuple elements by its position, just like an Array or a List. Let's look at an example:
+
+```scala
+val tuple = ("This", "is", "Scala", 3, "Tuple")
+assert(tuple(0) == "This")
+assert(tuple(3) == 3)
+assert(tuple._1 == tuple(0))
+```
+
+
+implicit parameters in Scala2 are called context parameters in scala3
+
+
+Doobie uses shapeless in Scala2 but not in Scala3
+
+[skunk](https://www.baeldung.com/scala/skunk-postgresql-driver)
