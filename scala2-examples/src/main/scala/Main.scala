@@ -50,10 +50,21 @@ import natchez.Trace.Implicits.noop
 import skunk.~
 import cats.effect.IO
 import cats.effect.Resource
+import cats.effect.kernel.Sync
+import cats.effect.kernel.Temporal
+import cats.effect.kernel.Spawn
+
+import cats.effect.kernel.ParallelF
+
+import cats.effect.kernel.MonadCancelThrow
+
+import cats.effect.kernel.Concurrent
+
+import cats.effect.kernel.Async
 //Session represents a connection to a Postgres database.
 //Skunk currently supports the trust (no password necessary), password, md5 and scram-sha-256 authentication methods.
 object Main extends App {
-
+Sync
   val kunkConnectionPool: Resource[IO, Resource[IO, Session[IO]]] = Session.pooled[IO](
     host = "localhost",
     port = 5432,
