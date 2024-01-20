@@ -71,8 +71,8 @@ object Statement {
 
     private def toTwiddle(
         e: Todo.Existing[UUID]
-    ) =
-      e.data.description *: e.data.deadline *: e.id *: HNil
+    ): String *: LocalDateTime *: UUID *: EmptyTuple =
+      e.data.description *: e.data.deadline *: e.id *: EmptyTuple
   }
 
   object Select {
