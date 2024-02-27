@@ -60,8 +60,8 @@ object PostgresEntityGateway {
         ): F[Vector[Todo.Existing[UUID]]] =
           resource.use { session =>
             session
-              .prepare(Statement.Select.byDescription)
-              .flatMap { preparedQuery =>
+              .prepareR(Statement.Select.byDescription)
+              .use { preparedQuery =>
                 preparedQuery
                   .stream(partialDescription, ChunkSizeInBytes)
                   .compile

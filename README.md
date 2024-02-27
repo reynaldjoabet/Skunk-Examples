@@ -227,6 +227,25 @@ CREATE TABLE OrderDetails (
 
 ````
 
+
+- Postgres
+- Cockroach Db
+- AWS Aurora
+
+
+
+```scala
+
+final case class TradeRepositoryLive(postgres: Resource[Task, Session[Task]]) extends TradeRepository{
+
+}
+
+```
+
+
+CockroachDB supports the PostgreSQL wire protocol, so you can use any available PostgreSQL client drivers to connect from various languages.
+
+https://aws.amazon.com/rds/aurora/
 [skunk](https://www.baeldung.com/scala/skunk-postgresql-driver)
 
 [scala-functional-database-libraries](https://medium.com/rahasak/scala-functional-database-libraries-31364b2cf7b2)

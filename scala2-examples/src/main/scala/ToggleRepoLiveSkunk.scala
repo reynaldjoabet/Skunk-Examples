@@ -50,8 +50,8 @@ class ToggleRepoLiveSkunk(connectionPool: Resource[IO, Resource[IO, Session[IO]]
     * encode toggles case class data into postgres data types
     * convert toggle case class util.Date into postgres timestamp
     */
-  val toggleEncoder = (uuid.opt ~ varchar(50) ~ text ~ text ~ timestamp)
-    .values.contramap((t: Toggle) => t.id ~ t.name ~ t.service ~ t.value ~ toLocalDateTime(t.timestamp))
+  val toggleEncoder: Encoder[Toggle] = (uuid.opt ~ varchar(50) ~ text ~ text ~ timestamp)
+    .values.contramap[Toggle](t => t.id ~ t.name ~ t.service ~ t.value ~ toLocalDateTime(t.timestamp))
 
   def init() = {
     // define query as skunk command

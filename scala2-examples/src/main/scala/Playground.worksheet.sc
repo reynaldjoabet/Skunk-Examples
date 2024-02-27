@@ -152,6 +152,15 @@ val update3: Command[Info] =
        sql"INSERT INTO pets VALUES $enc".command
      }
 
+     //ase class User(id: Int, username: String, email: String, age: Int)
+     def insertf(li:List[User])={
+      val enc=(int4~text~text~int4).values.list(6)
+     enc
+      sql"INSERT INTO d VALUES $enc".command
+     }
+(int4~text~text~int4).values.list(6)
+(int4~text~text~int4).list(6)
+
      val insert3 = insertMany(3)
      // insert3: Command[List[(String, Short)]] = Command(
      //   sql = "INSERT INTO pets VALUES ($1, $2), ($3, $4), ($5, $6)",
@@ -159,6 +168,7 @@ val update3: Command[Info] =
      //   encoder = Encoder(varchar, int2, varchar, int2, varchar, int2)
      // )
 
+     session.use(_.execute(insert3)(List(("hello",12),("hd",3),("jhe",3)))).void
 
      //returns a singleton type, hence the only type that can passed must be an exact match
      def insertExactly(ps: List[(String, Short)]): Command[ps.type] = {
@@ -217,3 +227,13 @@ val myenum: Codec[MyEnum] = enum[MyEnum](_.label, MyEnum.fromLabel, Type("myenum
 """|Hello 
                  |Dude
 """.stripMargin
+
+
+val n:9=9
+
+def h(l:9):l.type= 9
+
+h(n)
+
+
+"9898".startsWith(n.toString())
