@@ -6,21 +6,27 @@ import skunk.codec.all._
 import skunk.implicits._
 
 object Statement {
+
   implicit final private class TodoDataCompanionOps(
-      private val data: Todo.Data.type
+    private val data: Todo.Data.type
   ) {
+
     val codec: Codec[Todo.Data] =
       (text ~ timestamp).gimap[Todo.Data]
+
   }
 
   implicit final private class TodoExistingCompanionOps(
-      private val existing: Todo.Existing.type
+    private val existing: Todo.Existing.type
   ) {
+
     val codec: Codec[Todo.Existing[UUID]] =
       (uuid ~ Todo.Data.codec).gimap[Todo.Existing[UUID]]
+
   }
 
   object Insert {
+
     val one: Query[Todo.Data, Todo.Existing[UUID]] =
       sql"""
                INSERT INTO todo (description, deadline)
@@ -36,6 +42,7 @@ object Statement {
          """.query(Todo.Existing.codec)
 
     object WithUUID {
+
       val one: Command[Todo.Existing[UUID]] =
         sql"""
               INSERT INTO todo
@@ -47,34 +54,41 @@ object Statement {
               INSERT INTO todo
               VALUES (${Todo.Existing.codec.list(size)})
            """.command
+
     }
+
   }
 
   object Update {
+
     val one: Query[Todo.Existing[UUID], Todo.Existing[UUID]] =
       sql"""
                UPDATE todo
                   SET description = $text, deadline = $timestamp
-                WHERE id = ${uuid}
+                WHERE id = $uuid
             RETURNING *
          """.query(Todo.Existing.codec).contramap(toTwiddle)
 
     object Command {
+
       val one =
         sql"""
               UPDATE todo
                  SET description = $text, deadline = $timestamp
-               WHERE id = ${uuid}
+               WHERE id = $uuid
            """.command.contramap(toTwiddle)
+
     }
 
     private def toTwiddle(
-        e: Todo.Existing[UUID]
+      e: Todo.Existing[UUID]
     ): (String, LocalDateTime, UUID) =
       e.data.description *: e.data.deadline *: e.id *: EmptyTuple
+
   }
 
   object Select {
+
     val all: Query[Void, Todo.Existing[UUID]] =
       sql"""
             SELECT *
@@ -94,9 +108,11 @@ object Statement {
               FROM todo
              WHERE description ~ $text
          """.query(Todo.Existing.codec)
+
   }
 
   object Delete {
+
     val all: Command[Void] =
       sql"""
             DELETE
@@ -109,5 +125,7 @@ object Statement {
               FROM todo
              WHERE id IN (${uuid.list(size)})
          """.command
+
   }
+
 }

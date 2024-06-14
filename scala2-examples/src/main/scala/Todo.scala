@@ -1,12 +1,14 @@
 import java.time.LocalDateTime
+
 sealed abstract class Todo[+TodoId] extends Product with Serializable {
+
   protected type ThisType <: Todo[TodoId]
 
   import Todo._
 
   final def fold[B](
-      ifExisting: (TodoId, Data) => B,
-      ifData: (String, LocalDateTime) => B
+    ifExisting: (TodoId, Data) => B,
+    ifData: (String, LocalDateTime) => B
   ): B =
     this match {
       case Existing(id, data)          => ifExisting(id, data)
@@ -20,10 +22,13 @@ sealed abstract class Todo[+TodoId] extends Product with Serializable {
   def deadline: LocalDateTime
 
   def withUpdatedDeadline(newDeadline: LocalDateTime): ThisType
+
 }
 
 object Todo {
+
   final case class Existing[TodoId](id: TodoId, data: Data) extends Todo[TodoId] {
+
     override protected type ThisType = Existing[TodoId]
 
     override def description: String =
@@ -37,9 +42,11 @@ object Todo {
 
     override def withUpdatedDeadline(newDeadline: LocalDateTime): ThisType =
       copy(data = data.withUpdatedDeadline(newDeadline))
+
   }
 
   final case class Data(description: String, deadline: LocalDateTime) extends Todo[Nothing] {
+
     override protected type ThisType = Data
 
     override def withUpdatedDescription(newDescription: String): ThisType =
@@ -47,5 +54,7 @@ object Todo {
 
     override def withUpdatedDeadline(newDeadline: LocalDateTime): ThisType =
       copy(deadline = newDeadline)
+
   }
+
 }

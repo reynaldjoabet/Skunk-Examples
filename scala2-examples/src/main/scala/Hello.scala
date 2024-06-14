@@ -1,10 +1,12 @@
 import cats.effect._
-import skunk._
-import skunk.implicits._
-import skunk.codec.all._
+
 import natchez.Trace.Implicits.noop // (1)                          // (1)
+import skunk._
+import skunk.codec.all._
+import skunk.implicits._
 
 object Hello extends IOApp {
+
 // Command->SQL and parameter encoder for a statement that returns no rows
   val commad: Command[Short *: String *: EmptyTuple] =
     sql"INSERT INTO foo VALUES ($int2, $varchar)".command // Command[(Short, String)]
@@ -21,15 +23,15 @@ object Hello extends IOApp {
 //s.execute(a) // IO[List[String]]
 
   /**
-   * In the above example note that query parameters are specified by interpolated `Encoder`s and
-   * column types are specified by a `Decoder` passed to `.query`. The `~` syntax constructs
-   * left-associated HLists of types and values via nested pairs. These are all described in more
-   * detail a bit further down.
-   * Commands are constructed in a similar way but have no output columns and thus no `Decoder` is
-   *   needed.
-   */
+    * In the above example note that query parameters are specified by interpolated `Encoder`s and
+    * column types are specified by a `Decoder` passed to `.query`. The `~` syntax constructs
+    * left-associated HLists of types and values via nested pairs. These are all described in more
+    * detail a bit further down. Commands are constructed in a similar way but have no output
+    * columns and thus no `Decoder` is needed.
+    */
 
   val c = sql"""UPDATE employee SET    salary = salary * 1.05 WHERE  id = $int8""".command // Command[Long]
+
   val session: Resource[IO, Session[IO]] =
     Session.single( // (2)
       host = "localhost",

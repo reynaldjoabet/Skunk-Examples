@@ -1,70 +1,47 @@
-import skunk.SessionPool
+import cats.effect.kernel.Async
+import cats.effect.kernel.Concurrent
+import cats.effect.kernel.MonadCancelThrow
+import cats.effect.kernel.ParallelF
+import cats.effect.kernel.Spawn
+import cats.effect.kernel.Sync
+import cats.effect.kernel.Temporal
+import cats.effect.IO
+import cats.effect.Resource
 
-import skunk.Channel
-
-import skunk.Codec
-
-import skunk.Decoder
-
-import skunk.Cursor
-
-import skunk.Encoder
-
-import skunk.Fragment
-import skunk.PreparedCommand
-
-import skunk.PreparedQuery
-
-import skunk.Query
-
-import skunk.SSL
-
-import skunk.Session
-import skunk.SqlState
-import skunk.Statement
-import skunk.Transaction
-
-import skunk.Void
-
-import skunk.feature
-
-import skunk.featureFlags
-
+import natchez.Trace.Implicits.noop
+import skunk.~
 import skunk.codec.AllCodecs
 import skunk.data.Notification
 import skunk.exception
-
-import skunk.net.protocol.Exchange
-
-import skunk.net.protocol
-
-import skunk.net.protocol
-import skunk.syntax
-
-import skunk.util.Text
-
-import skunk.util.Pool
+import skunk.feature
+import skunk.featureFlags
 import skunk.implicits
-import natchez.Trace.Implicits.noop
+import skunk.net.protocol
+import skunk.net.protocol.Exchange
+import skunk.syntax
+import skunk.util.Pool
+import skunk.util.Text
+import skunk.Channel
+import skunk.Codec
+import skunk.Cursor
+import skunk.Decoder
+import skunk.Encoder
+import skunk.Fragment
+import skunk.PreparedCommand
+import skunk.PreparedQuery
+import skunk.Query
+import skunk.SSL
+import skunk.Session
+import skunk.SessionPool
+import skunk.SqlState
+import skunk.Statement
+import skunk.Transaction
+import skunk.Void
 
-import skunk.~
-import cats.effect.IO
-import cats.effect.Resource
-import cats.effect.kernel.Sync
-import cats.effect.kernel.Temporal
-import cats.effect.kernel.Spawn
-
-import cats.effect.kernel.ParallelF
-
-import cats.effect.kernel.MonadCancelThrow
-
-import cats.effect.kernel.Concurrent
-
-import cats.effect.kernel.Async
 //Session represents a connection to a Postgres database.
 //Skunk currently supports the trust (no password necessary), password, md5 and scram-sha-256 authentication methods.
 object Main extends App {
-Sync
+
   val kunkConnectionPool: Resource[IO, Resource[IO, Session[IO]]] = Session.pooled[IO](
     host = "localhost",
     port = 5432,
@@ -81,4 +58,5 @@ Sync
 
   // A base encoder maps a Scala type to a single Postgres schema type
   println("Hello, World!")
+
 }
