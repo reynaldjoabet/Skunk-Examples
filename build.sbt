@@ -33,3 +33,5 @@ scalacOptions += "-target:17" // ensures the Scala compiler generates bytecode o
 // )
 
 ThisBuild / semanticdbEnabled := true
+
+ThisBuild/usePipelining := true
